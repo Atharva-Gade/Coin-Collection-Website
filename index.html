@@ -7,337 +7,797 @@
 <title>Coin Collection</title>
 <style>
 :root {
-  --bg: #f5f3ed;
-  --card: #fffefa;
-  --ink: #252a24;
-  --muted: #77796f;
-  --green: #315b43;
-  --line: #e5e2d8;
-  --gold: #b58a43;
+  --bg: #f5f3ee;
+  --card: #ffffff;
+  --ink: #20231f;
+  --muted: #777970;
+  --green: #245943;
+  --green-light: #e5efe7;
+  --gold: #c69a45;
+  --border: #e5e2d9;
 }
 * { box-sizing: border-box; }
 body {
   margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
   background: var(--bg);
   color: var(--ink);
-  font-family: Inter, system-ui, Arial, sans-serif;
 }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
 header {
-  background: var(--green);
+  background: #173e30;
   color: white;
-  padding: 23px max(20px, calc((100% - 1120px)/2));
+  padding: 25px 6%;
 }
-.brand { font-size: 23px; font-weight: 800; }
-.brand span { color: #e6c982; }
-header p { margin: 6px 0 0; color: #d9e2d9; font-size: 14px; }
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.brand-icon {
+  width: 49px;
+  height: 49px;
+  display: grid;
+  place-items: center;
+  border: 2px solid #d8b56b;
+  border-radius: 50%;
+  color: #e5c77d;
+  font-size: 25px;
+}
+.brand h1 { margin: 0; font-size: 24px; }
+.brand p { margin: 5px 0 0; color: #d4dfd5; font-size: 13px; }
 nav {
-  display: flex; gap: 8px; flex-wrap: wrap;
-  max-width: 1120px; margin: auto; padding: 18px 20px 0;
+  display: flex;
+  gap: 8px;
+  padding: 12px 6%;
+  background: white;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
 }
-nav button, .filter, .action {
-  border: 1px solid var(--line);
-  background: var(--card);
-  padding: 10px 15px;
-  border-radius: 9px;
-  cursor: pointer;
-  color: var(--ink);
-  font: inherit;
+.nav-btn {
+  border: 0;
+  background: transparent;
+  padding: 12px 16px;
+  border-radius: 8px;
+  white-space: nowrap;
+  color: var(--muted);
 }
-nav button.active, .action {
-  background: var(--green); color: white; border-color: var(--green);
+.nav-btn.active {
+  background: var(--green-light);
+  color: var(--green);
+  font-weight: 700;
 }
-main { max-width: 1120px; margin: auto; padding: 24px 20px 60px; }
-h1 { font-size: clamp(27px, 4vw, 38px); margin: 5px 0 8px; }
-h2 { font-size: 21px; }
-.muted { color: var(--muted); }
+main { max-width: 1200px; margin: auto; padding: 30px 22px 65px; }
+.hero { margin-bottom: 25px; }
+.eyebrow {
+  color: var(--green);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 11px;
+  font-weight: 800;
+}
+h2 { margin: 8px 0; font-size: 30px; }
+.subtitle { color: var(--muted); line-height: 1.6; }
 .stats {
-  display: grid; grid-template-columns: repeat(3,1fr);
-  gap: 13px; margin: 24px 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 13px;
+  margin: 24px 0;
 }
-.stat, .panel, .coin {
-  background: var(--card); border: 1px solid var(--line);
-  border-radius: 14px;
+.stat {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px;
 }
-.stat { padding: 18px; }
-.stat strong { display: block; font-size: 27px; margin-top: 7px; }
+.stat-label { color: var(--muted); font-size: 12px; }
+.stat-number { font-size: 27px; font-weight: 750; margin: 9px 0 4px; }
+.stat-note { font-size: 11px; color: var(--muted); }
 .toolbar {
-  display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 22px 0;
 }
-input, select {
-  border: 1px solid var(--line); background: white;
-  border-radius: 9px; padding: 12px; font: inherit;
+.toolbar input, .toolbar select, .year-select, .year-input {
+  min-height: 43px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: white;
+  color: var(--ink);
 }
-input { flex: 1; min-width: 190px; }
-.grid {
-  display: grid; grid-template-columns: repeat(3,minmax(0,1fr));
-  gap: 15px;
+.toolbar input { flex: 1 1 240px; }
+.toolbar select { flex: 0 1 180px; }
+.coin-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
 }
-.coin { overflow: hidden; }
-.coin-top {
-  padding: 22px 12px; background: #eeece2;
-  text-align: center;
+.coin-card {
+  min-width: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
+.coin-top { display: flex; gap: 14px; align-items: center; }
 .coin-art {
-  width: 104px; height: 104px; border-radius: 50%;
-  margin: auto; display: grid; place-items: center;
-  border: 5px double #b4a16d;
-  background: radial-gradient(circle at 35% 30%, #f6e7b5, #bca66d 72%, #8e7849);
-  box-shadow: 0 4px 10px #0002;
-  color: #5e4c27; font-size: 26px; font-weight: 800;
+  flex: 0 0 83px;
+  width: 83px;
+  height: 83px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff0b8, #c9a04f 58%, #8e672b);
+  border: 5px double #9b7839;
+  display: grid;
+  place-items: center;
+  color: #614719;
+  font-size: 21px;
+  font-weight: 800;
+  box-shadow: inset 0 0 0 2px #e9ca7e;
 }
-.coin-body { padding: 16px; }
-.coin h3 { margin: 0 0 7px; font-size: 17px; }
+.coin-art span { text-align: center; }
+.coin-title { font-size: 17px; font-weight: 750; line-height: 1.35; }
+.coin-meta { color: var(--muted); font-size: 12px; margin-top: 6px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .tag {
-  display: inline-block; font-size: 11px; border-radius: 5px;
-  background: #e8eee6; color: var(--green); padding: 5px 7px;
-  margin: 3px 0 10px;
+  background: #f0eee8;
+  padding: 5px 8px;
+  border-radius: 5px;
+  color: #59594f;
+  font-size: 11px;
 }
-.coin p { font-size: 13px; line-height: 1.5; }
-.coin-bottom {
-  border-top: 1px solid var(--line); padding-top: 12px;
-  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+.tag.green { background: var(--green-light); color: var(--green); }
+.description { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.years-info { font-size: 12px; color: var(--muted); }
+.own-toggle {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  border-top: 1px solid var(--border);
+  padding-top: 13px;
+  font-size: 13px;
+  font-weight: 700;
 }
-.coin-bottom label { font-size: 13px; cursor: pointer; }
-.coin-bottom input { min-width: auto; flex: none; }
-.panel { padding: 22px; margin: 18px 0; }
-.progress {
-  height: 10px; border-radius: 10px; background: #e7e5db;
-  overflow: hidden; margin: 13px 0;
+.own-toggle input { width: 17px; height: 17px; accent-color: var(--green); }
+.year-panel {
+  background: #f8f8f4;
+  border-radius: 9px;
+  padding: 12px;
+  display: none;
 }
-.progress div { height: 100%; background: var(--green); width: 0; }
+.year-panel.open { display: block; }
+.year-panel label { font-size: 12px; font-weight: 700; display: block; margin-bottom: 7px; }
+.year-row { display: flex; gap: 7px; }
+.year-select { min-width: 0; width: 100%; flex: 1; }
+.btn {
+  border: 0;
+  border-radius: 7px;
+  padding: 10px 13px;
+  font-weight: 700;
+  font-size: 12px;
+}
+.btn-primary { background: var(--green); color: white; }
+.btn-secondary { background: var(--green-light); color: var(--green); }
+.btn-danger { background: #f7e8e5; color: #8e3028; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.owned-years { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.year-chip {
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: #e5efe7;
+  color: #245943;
+  font-size: 12px;
+}
+.year-chip button {
+  border: 0; background: none; color: inherit; padding: 0;
+  font-weight: 800; font-size: 15px;
+}
+.card-actions { display: flex; justify-content: flex-end; }
+.empty {
+  text-align: center;
+  padding: 45px 15px;
+  color: var(--muted);
+  background: white;
+  border-radius: 12px;
+  border: 1px dashed var(--border);
+  grid-column: 1 / -1;
+}
+.profile-panel {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 25px;
+  margin-top: 20px;
+}
+.progress-track {
+  height: 10px;
+  background: #eae8e0;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--green);
+  transition: width .2s;
+}
+.notice {
+  padding: 13px;
+  background: #f5f0df;
+  border-radius: 8px;
+  color: #6b592f;
+  font-size: 12px;
+  line-height: 1.5;
+  margin-top: 18px;
+}
+footer {
+  border-top: 1px solid var(--border);
+  text-align: center;
+  padding: 24px 15px;
+  color: var(--muted);
+  font-size: 12px;
+}
 .hidden { display: none !important; }
-footer { text-align: center; color: var(--muted); padding: 25px; font-size: 12px; }
-@media(max-width:760px) {
-  .grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+@media(max-width: 850px) {
+  .coin-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@media(max-width:480px) {
-  .grid, .stats { grid-template-columns: 1fr; }
-  nav button { flex: 1; }
+@media(max-width: 540px) {
+  main { padding: 23px 14px 45px; }
+  header { padding: 22px 17px; }
+  nav { padding: 10px 12px; }
+  .coin-grid { grid-template-columns: 1fr; }
+  h2 { font-size: 26px; }
+  .stat { padding: 14px; }
 }
 </style>
 </head>
 <body>
+
 <header>
-  <div class="brand">Bharat <span>Coin Collection</span></div>
-  <p>Discover India's coins. Build your collection.</p>
+  <div class="brand">
+    <div class="brand-icon">₹</div>
+    <div>
+      <h1>Bharat Coin Vault</h1>
+      <p>Your personal Indian coin collection</p>
+    </div>
+  </div>
 </header>
 
 <nav>
-  <button class="active" data-page="catalogue">Coin Index</button>
-  <button data-page="collection">My Collection</button>
-  <button data-page="profile">My Profile</button>
+  <button class="nav-btn active" data-page="catalogue">Coin Index</button>
+  <button class="nav-btn" data-page="collection">My Collection</button>
+  <button class="nav-btn" data-page="profile">My Profile</button>
 </nav>
 
 <main>
-  <section id="catalogue">
-    <h1>Indian Coin Index</h1>
-    <p class="muted">Explore coins of the Republic of India and track the ones you own.</p>
-    <div class="stats">
-      <div class="stat">Coins in catalogue<strong id="total">0</strong></div>
-      <div class="stat">Coins collected<strong id="ownedCount">0</strong></div>
-      <div class="stat">Collection progress<strong id="percent">0%</strong></div>
-    </div>
+  <section class="hero">
+    <div class="eyebrow">Republic of India · Numismatic catalogue</div>
+    <h2 id="page-title">Explore Indian Coins</h2>
+    <p class="subtitle" id="page-subtitle">
+      Discover coin designs, record the years you own, and build your collection.
+    </p>
+  </section>
+
+  <section class="stats" id="stats"></section>
+
+  <section id="catalogue-page">
     <div class="toolbar">
-      <input id="search" placeholder="Search coin, series, or year..." aria-label="Search coins">
-      <select id="denom" aria-label="Filter denomination">
-        <option value="">All denominations</option>
-        <option>₹1</option><option>₹2</option><option>₹5</option>
-        <option>₹10</option><option>₹20</option>
+      <input id="search" type="search" placeholder="Search coin designs, themes or denominations…">
+      <select id="denomination">
+        <option value="all">All denominations</option>
+        <option value="1">₹1 coins</option>
+        <option value="2">₹2 coins</option>
+        <option value="5">₹5 coins</option>
+        <option value="10">₹10 coins</option>
       </select>
-      <select id="sort" aria-label="Sort coins">
-        <option value="year">Sort: year</option>
-        <option value="denom">Sort: denomination</option>
-        <option value="name">Sort: name</option>
+      <select id="ownership-filter">
+        <option value="all">All coins</option>
+        <option value="owned">Coins I own</option>
+        <option value="missing">Coins I don't own</option>
       </select>
     </div>
-    <div class="grid" id="coinGrid"></div>
-    <p id="empty" class="muted hidden">No coins match your search.</p>
+    <div class="coin-grid" id="coin-grid"></div>
+    <p class="subtitle" style="font-size:12px;margin-top:20px">
+      The catalogue is a starter collection, not yet a complete or officially verified index.
+    </p>
   </section>
 
-  <section id="collection" class="hidden">
-    <h1>My Collection</h1>
-    <p class="muted">Every coin you mark as owned appears here.</p>
-    <div class="panel">
-      <strong id="collectionSummary">0 coins collected</strong>
-      <div class="progress"><div id="collectionBar"></div></div>
-      <p class="muted" id="collectionPercent">0% complete</p>
+  <section id="collection-page" class="hidden">
+    <div class="toolbar">
+      <input id="collection-search" type="search" placeholder="Search your collection…">
+      <button class="btn btn-primary" id="export-btn">Export collection CSV</button>
     </div>
-    <div class="grid" id="collectionGrid"></div>
-    <p id="collectionEmpty" class="muted">You haven't added any coins yet. Visit the Coin Index to get started.</p>
+    <div id="collection-grid" class="coin-grid"></div>
   </section>
 
-  <section id="profile" class="hidden">
-    <h1>Collector Profile</h1>
-    <p class="muted">Your personal coin-collecting journey.</p>
-    <div class="panel">
-      <span class="muted">COLLECTOR</span>
-      <h2>My Coin Collection 🇮🇳</h2>
-      <div class="stats">
-        <div class="stat">Unique coins<strong id="profileCount">0</strong></div>
-        <div class="stat">Completion<strong id="profilePercent">0%</strong></div>
-        <div class="stat">Face value owned<strong id="faceValue">₹0</strong></div>
+  <section id="profile-page" class="hidden">
+    <div class="profile-panel">
+      <div class="eyebrow">Collector profile</div>
+      <h2 style="font-size:23px">My Coin Collection</h2>
+      <p class="subtitle">Your progress is calculated from the designs and years you record.</p>
+      <div id="profile-details"></div>
+      <div class="notice">
+        Rarity has not been independently verified for these starter entries. A coin's
+        rarity depends on its year, mint mark, mintage, survival and market availability.
+        This site does not claim that a particular coin is the rarest without evidence.
       </div>
-      <h2>Your rarest listed coin</h2>
-      <div id="rarest"><p class="muted">Add coins to your collection to see this feature.</p></div>
-      <p class="muted">Rarity ratings are preliminary estimates, not verified mintage data or appraisals.</p>
+      <div style="margin-top:20px">
+        <button class="btn btn-secondary" id="profile-export">Download my collection CSV</button>
+      </div>
     </div>
-    <div class="panel">
-      <h2>Collection milestones</h2>
-      <p id="milestone">Your first coin is waiting!</p>
+    <div class="profile-panel">
+      <h3>About your data</h3>
+      <p class="description">
+        Your collection is stored in this browser on this device. It is not synced to
+        an online account. Clearing browser data may remove it, so export a CSV backup.
+      </p>
     </div>
-    <button class="action" id="export">Export my checklist (CSV)</button>
   </section>
 </main>
 
 <footer>
-  Bharat Coin Collection · Independent collector project · Rarity and catalogue data require verification.
+  Bharat Coin Vault · A personal collector project · Coin information should be verified before publication.
 </footer>
 
 <script>
+/*
+  Each object represents one coin design, not one year.
+  Add verified design records here as the catalogue grows.
+  The available years below are starter data and may need verification.
+*/
 const coins = [
-  {id:"u2-2006",name:"Unity in Diversity",denom:"₹2",year:2006,series:"Unity in Diversity",rarity:3,info:"Commemorative-themed circulation design."},
-  {id:"hm-2008",name:"Hasta Mudra",denom:"₹2",year:2008,series:"Hasta Mudra",rarity:2,info:"Hasta Mudra design."},
-  {id:"hm-2009",name:"Hasta Mudra",denom:"₹2",year:2009,series:"Hasta Mudra",rarity:2,info:"Hasta Mudra design."},
-  {id:"hm-2010",name:"Hasta Mudra",denom:"₹2",year:2010,series:"Hasta Mudra",rarity:2,info:"Hasta Mudra design."},
-  {id:"hm-2011",name:"Hasta Mudra",denom:"₹2",year:2011,series:"Hasta Mudra",rarity:2,info:"Hasta Mudra design."},
-  {id:"vaishno-5",name:"Shri Mata Vaishno Devi Shrine Board",denom:"₹5",year:2012,series:"Commemorative",rarity:4,info:"Commemorative coin; verify exact issue details."},
-  {id:"akam-1-2026",name:"Azadi Ka Amrit Mahotsav",denom:"₹1",year:2026,series:"AKAM",rarity:1,info:"Design/year details need confirmation."},
-  {id:"grain-2-2019",name:"Grain Series",denom:"₹2",year:2019,series:"Grain Series",rarity:1,info:"Modern circulation coin."},
-  {id:"grain-5-2019",name:"Grain Series",denom:"₹5",year:2019,series:"Grain Series",rarity:1,info:"Modern circulation coin."},
-  {id:"rupee-1-2015",name:"Rupee Symbol Series",denom:"₹1",year:2015,series:"Rupee Symbol",rarity:1,info:"₹ symbol design."},
-  {id:"rupee-2-2011",name:"Rupee Symbol Series",denom:"₹2",year:2011,series:"Rupee Symbol",rarity:2,info:"₹ symbol design."},
-  {id:"rupee-2-2014",name:"Rupee Symbol Series",denom:"₹2",year:2014,series:"Rupee Symbol",rarity:1,info:"₹ symbol design."},
-  {id:"rupee-2-2015",name:"Rupee Symbol Series",denom:"₹2",year:2015,series:"Rupee Symbol",rarity:1,info:"₹ symbol design."},
-  {id:"rupee-2-2016",name:"Rupee Symbol Series",denom:"₹2",year:2016,series:"Rupee Symbol",rarity:1,info:"₹ symbol design."},
-  {id:"rupee-5-2013",name:"Rupee Symbol Series",denom:"₹5",year:2013,series:"Rupee Symbol",rarity:1,info:"₹ symbol design."},
-  {id:"rupee-10-2015",name:"Rupee Symbol Series",denom:"₹10",year:2015,series:"Rupee Symbol",rarity:1,info:"₹ symbol design."},
-  {id:"rupee-10-2017",name:"Rupee Symbol Series",denom:"₹10",year:2017,series:"Rupee Symbol",rarity:1,info:"₹ symbol design."},
-  {id:"lotus-5-2009",name:"Lotus Series",denom:"₹5",year:2009,series:"Lotus / Floral",rarity:2,info:"Floral design; exact series dates should be verified."},
-  {id:"grain-1-2000",name:"Grain Stalks Series",denom:"₹1",year:2000,series:"Grain Stalks",rarity:2,info:"Older grain-stalk design."}
+  {
+    id: "unity-diversity-2",
+    name: "Unity in Diversity",
+    denomination: 2,
+    category: "Commemorative",
+    years: [2006],
+    description: "Design associated with the theme of unity in India's diversity.",
+    rarity: "Unverified"
+  },
+  {
+    id: "hasta-mudra-2",
+    name: "Hasta Mudra",
+    denomination: 2,
+    category: "Commemorative",
+    years: [2008, 2009, 2010, 2011],
+    description: "A design featuring a hand gesture. Record the year stamped on your coin.",
+    rarity: "Unverified"
+  },
+  {
+    id: "vaishno-devi-5",
+    name: "Shri Mata Vaishno Devi Shrine Board",
+    denomination: 5,
+    category: "Commemorative",
+    years: [2012],
+    description: "Commemorative theme associated with the Shri Mata Vaishno Devi Shrine Board.",
+    rarity: "Unverified"
+  },
+  {
+    id: "akam-1",
+    name: "Azadi Ka Amrit Mahotsav (AKAM)",
+    denomination: 1,
+    category: "Commemorative",
+    years: [2026],
+    description: "Starter entry. Verify the coin's exact design, date and issue details before relying on this record.",
+    rarity: "Unverified"
+  },
+  {
+    id: "grain-series-2",
+    name: "Grain Series",
+    denomination: 2,
+    category: "Circulation",
+    years: [2019],
+    description: "Grain-themed design. Other years or varieties can be added when verified.",
+    rarity: "Unverified"
+  },
+  {
+    id: "grain-series-5",
+    name: "Grain Series",
+    denomination: 5,
+    category: "Circulation",
+    years: [2019],
+    description: "Five-rupee grain-themed coin design.",
+    rarity: "Unverified"
+  },
+  {
+    id: "rupee-symbol-1",
+    name: "Rupee Symbol",
+    denomination: 1,
+    category: "Circulation",
+    years: [2015],
+    description: "One-rupee design associated with the Indian rupee symbol.",
+    rarity: "Unverified"
+  },
+  {
+    id: "rupee-symbol-2",
+    name: "Rupee Symbol",
+    denomination: 2,
+    category: "Circulation",
+    years: [2011, 2014, 2015, 2016],
+    description: "Two-rupee rupee-symbol design. Years are grouped under one catalogue entry.",
+    rarity: "Unverified"
+  },
+  {
+    id: "rupee-symbol-5",
+    name: "Rupee Symbol",
+    denomination: 5,
+    category: "Circulation",
+    years: [2013],
+    description: "Five-rupee rupee-symbol design.",
+    rarity: "Unverified"
+  },
+  {
+    id: "rupee-symbol-10",
+    name: "Rupee Symbol",
+    denomination: 10,
+    category: "Circulation",
+    years: [2015, 2017],
+    description: "Ten-rupee rupee-symbol design. Record the date on your coin.",
+    rarity: "Unverified"
+  },
+  {
+    id: "lotus-5",
+    name: "Lotus Series",
+    denomination: 5,
+    category: "Circulation",
+    years: [2009],
+    description: "Lotus-themed design. Verify the exact variety against your coin.",
+    rarity: "Unverified"
+  },
+  {
+    id: "grain-stalks-1",
+    name: "Grain Stalks",
+    denomination: 1,
+    category: "Circulation",
+    years: [2000],
+    description: "One-rupee design described as grain-stalks themed.",
+    rarity: "Unverified"
+  }
 ];
 
-// Rarity scores are only starter estimates; do not treat them as valuations.
-let owned = new Set();
-try {
-  owned = new Set(JSON.parse(localStorage.getItem("bharatOwned") || "[]"));
-} catch (error) {
-  owned = new Set();
+const STORAGE_KEY = "bharatCoinVaultCollectionV2";
+const LEGACY_KEY = "coinCollection";
+let owned = loadOwned();
+let currentPage = "catalogue";
+
+function loadOwned() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) return JSON.parse(saved);
+
+    // Try to migrate the earlier prototype's checklist where possible.
+    const legacy = localStorage.getItem(LEGACY_KEY);
+    if (legacy) {
+      const old = JSON.parse(legacy);
+      const migrated = {};
+      coins.forEach(coin => {
+        const matching = coin.years.filter(year =>
+          old[coin.name + " " + coin.denomination + " " + year] === true ||
+          old[coin.name + " ₹" + coin.denomination + " " + year] === true
+        );
+        if (matching.length) migrated[coin.id] = matching;
+      });
+      return migrated;
+    }
+  } catch (error) {
+    console.warn("Could not load saved collection.", error);
+  }
+  return {};
 }
 
-const $ = id => document.getElementById(id);
-const rarityLabel = score => ({
-  1:"Common (estimated)",
-  2:"Less common (estimated)",
-  3:"Uncommon (estimated)",
-  4:"Potentially scarce (unverified)"
-}[score] || "Unknown");
-
-function save() {
+function saveOwned() {
   try {
-    localStorage.setItem("bharatOwned", JSON.stringify([...owned]));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(owned));
   } catch (error) {
-    alert("Your browser could not save the checklist. Check browser storage settings.");
+    alert("Your browser could not save the collection. Export a backup if possible.");
   }
 }
 
-function card(c) {
-  return `<article class="coin">
-    <div class="coin-top"><div class="coin-art" aria-label="Decorative coin illustration">${c.denom.replace("₹","")}</div></div>
-    <div class="coin-body">
-      <span class="tag">${c.series}</span>
-      <h3>${c.denom} · ${c.name}</h3>
-      <p class="muted">Year: ${c.year}</p>
-      <p>${c.info}</p>
-      <p class="muted">${rarityLabel(c.rarity)}</p>
-      <div class="coin-bottom">
-        <label><input type="checkbox" data-coin="${c.id}" ${owned.has(c.id)?"checked":""}> I own this</label>
-        <span>${c.year}</span>
+function getYears(coin) {
+  return Array.isArray(owned[coin.id]) ? owned[coin.id].map(Number) : [];
+}
+
+function owns(coin) {
+  return getYears(coin).length > 0;
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;",
+    '"': "&quot;", "'": "&#39;"
+  })[char]);
+}
+
+function coinArt(coin) {
+  return `<div class="coin-art" aria-label="Decorative coin illustration">
+    <span>₹${coin.denomination}</span>
+  </div>`;
+}
+
+function cardHTML(coin, context = "catalogue") {
+  const yearsOwned = getYears(coin).sort((a,b) => a-b);
+  const isOwned = yearsOwned.length > 0;
+  const yearOptions = [...new Set(coin.years.concat(yearsOwned))].sort((a,b) => a-b);
+
+  return `
+  <article class="coin-card" data-id="${escapeHTML(coin.id)}">
+    <div class="coin-top">
+      ${coinArt(coin)}
+      <div>
+        <div class="coin-title">${escapeHTML(coin.name)}</div>
+        <div class="coin-meta">₹${coin.denomination} · ${escapeHTML(coin.category)}</div>
       </div>
     </div>
+    <div class="tags">
+      <span class="tag">${coin.years.length} listed ${coin.years.length === 1 ? "year" : "years"}</span>
+      ${isOwned ? `<span class="tag green">${yearsOwned.length} owned ${yearsOwned.length === 1 ? "year" : "years"}</span>` : ""}
+    </div>
+    <div class="description">${escapeHTML(coin.description)}</div>
+    <div class="years-info">Catalogue years: ${coin.years.length ? coin.years.join(", ") : "Not recorded"}</div>
+    <label class="own-toggle">
+      <input class="own-checkbox" type="checkbox" ${isOwned ? "checked" : ""}
+        aria-label="I own ${escapeHTML(coin.name)} ₹${coin.denomination}">
+      I own this coin
+    </label>
+    <div class="year-panel ${isOwned ? "open" : ""}">
+      <label>Select a year you own</label>
+      <div class="year-row">
+        <select class="year-select" aria-label="Year of coin">
+          <option value="">Choose year…</option>
+          ${yearOptions.map(year => `<option value="${year}">${year}</option>`).join("")}
+          <option value="other">Enter another year…</option>
+        </select>
+        <button class="btn btn-primary add-year">Add year</button>
+      </div>
+      <div class="custom-year-row hidden" style="display:none;margin-top:8px">
+        <input class="year-input" type="number" min="1835" max="2100" placeholder="Enter year" style="width:100%">
+        <button class="btn btn-secondary add-custom-year" style="margin-top:6px">Save year</button>
+      </div>
+      <div class="owned-years">
+        ${yearsOwned.map(year => `<span class="year-chip">${year}
+          <button type="button" class="remove-year" data-year="${year}" aria-label="Remove year ${year}">×</button>
+        </span>`).join("")}
+      </div>
+    </div>
+    ${context === "collection" ? `<div class="card-actions"><button class="btn btn-danger remove-coin">Remove all years</button></div>` : ""}
   </article>`;
 }
 
-function filteredCoins() {
-  const query = $("search").value.trim().toLowerCase();
-  const denom = $("denom").value;
-  let list = coins.filter(c =>
-    (!denom || c.denom === denom) &&
-    `${c.name} ${c.denom} ${c.year} ${c.series}`.toLowerCase().includes(query)
-  );
-  const sort = $("sort").value;
-  list.sort((a,b) => sort === "name"
-    ? a.name.localeCompare(b.name)
-    : sort === "denom"
-      ? Number(a.denom.slice(1)) - Number(b.denom.slice(1)) || a.year-b.year
-      : a.year-b.year);
-  return list;
+function statsHTML() {
+  const designsOwned = coins.filter(owns).length;
+  const yearCount = coins.reduce((sum, coin) => sum + getYears(coin).length, 0);
+  const totalYears = coins.reduce((sum, coin) => sum + coin.years.length, 0);
+  const progress = coins.length ? Math.round(designsOwned / coins.length * 100) : 0;
+
+  return `
+    <div class="stat"><div class="stat-label">Catalogue designs</div><div class="stat-number">${coins.length}</div><div class="stat-note">Current starter entries</div></div>
+    <div class="stat"><div class="stat-label">Designs collected</div><div class="stat-number">${designsOwned}</div><div class="stat-note">Distinct designs owned</div></div>
+    <div class="stat"><div class="stat-label">Coins / years recorded</div><div class="stat-number">${yearCount}</div><div class="stat-note">Recorded year entries</div></div>
+    <div class="stat"><div class="stat-label">Catalogue progress</div><div class="stat-number">${progress}%</div><div class="stat-note">Based on starter entries</div></div>`;
 }
 
-function drawGrid(element, list) {
-  $(element).innerHTML = list.map(card).join("");
+function renderStats() {
+  document.getElementById("stats").innerHTML = statsHTML();
 }
 
-function update() {
-  const count = owned.size;
-  const percent = Math.round(count / coins.length * 100);
-  $("total").textContent = coins.length;
-  $("ownedCount").textContent = count;
-  $("percent").textContent = percent + "%";
-  drawGrid("coinGrid", filteredCoins());
-  $("empty").classList.toggle("hidden", filteredCoins().length !== 0);
+function renderCatalogue() {
+  const search = document.getElementById("search").value.trim().toLowerCase();
+  const denomination = document.getElementById("denomination").value;
+  const filter = document.getElementById("ownership-filter").value;
 
-  const collected = coins.filter(c => owned.has(c.id));
-  drawGrid("collectionGrid", collected);
-  $("collectionEmpty").classList.toggle("hidden", collected.length !== 0);
-  $("collectionSummary").textContent = `${count} of ${coins.length} catalogue entries collected`;
-  $("collectionPercent").textContent = percent + "% complete";
-  $("collectionBar").style.width = percent + "%";
-  $("profileCount").textContent = count;
-  $("profilePercent").textContent = percent + "%";
-  $("faceValue").textContent = "₹" + collected.reduce((sum,c)=>sum+Number(c.denom.slice(1)),0);
+  const results = coins.filter(coin => {
+    const text = [coin.name, coin.category, coin.description,
+      coin.denomination, ...coin.years].join(" ").toLowerCase();
+    return (!search || text.includes(search)) &&
+      (denomination === "all" || String(coin.denomination) === denomination) &&
+      (filter === "all" || (filter === "owned" ? owns(coin) : !owns(coin)));
+  });
 
-  // Until mintage and survival data are researched, this is only a provisional ranking.
-  const rarest = [...collected].sort((a,b)=>b.rarity-a.rarity || a.year-b.year)[0];
-  $("rarest").innerHTML = rarest
-    ? `<h3>${rarest.denom} · ${rarest.name} (${rarest.year})</h3><p>${rarityLabel(rarest.rarity)}</p><p class="muted">Preliminary ranking only. Verified mintage and variety data may change this result.</p>`
-    : `<p class="muted">Add coins to your collection to see this feature.</p>`;
-  $("milestone").textContent = count === 0 ? "Your first coin is waiting!" :
-    count === coins.length ? "Catalogue starter set completed. Congratulations!" :
-    count >= 10 ? "Great progress — you've collected 10 or more entries!" :
-    "You've started your collection. Keep going!";
+  document.getElementById("coin-grid").innerHTML = results.length
+    ? results.map(coin => cardHTML(coin)).join("")
+    : `<div class="empty">No matching coins found. Try another search.</div>`;
 }
+
+function renderCollection() {
+  const search = document.getElementById("collection-search").value.trim().toLowerCase();
+  const results = coins.filter(coin => owns(coin) &&
+    [coin.name, coin.category, coin.denomination, ...getYears(coin)]
+      .join(" ").toLowerCase().includes(search));
+
+  document.getElementById("collection-grid").innerHTML = results.length
+    ? results.map(coin => cardHTML(coin, "collection")).join("")
+    : `<div class="empty">Your collection is empty, or no coins match your search.
+       Go to Coin Index and tick “I own this coin” to get started.</div>`;
+}
+
+function renderProfile() {
+  const designsOwned = coins.filter(owns).length;
+  const yearsOwned = coins.reduce((sum, coin) => sum + getYears(coin).length, 0);
+  const progress = coins.length ? Math.round(designsOwned / coins.length * 100) : 0;
+  const denomCounts = [1,2,5,10].map(value => ({
+    value,
+    count: coins.filter(coin => coin.denomination === value && owns(coin)).length
+  }));
+
+  document.getElementById("profile-details").innerHTML = `
+    <div class="stats">
+      <div class="stat"><div class="stat-label">Designs owned</div><div class="stat-number">${designsOwned}</div></div>
+      <div class="stat"><div class="stat-label">Year entries</div><div class="stat-number">${yearsOwned}</div></div>
+    </div>
+    <p><strong>Catalogue completion</strong> — ${progress}%</p>
+    <div class="progress-track"><div class="progress-fill" style="width:${progress}%"></div></div>
+    <p class="description">${designsOwned} of ${coins.length} starter catalogue designs marked as owned.</p>
+    <h3>Collection by denomination</h3>
+    ${denomCounts.map(item => `<p>₹${item.value}: <strong>${item.count}</strong> design${item.count === 1 ? "" : "s"} owned</p>`).join("")}
+    <h3>Rarest coin owned</h3>
+    <p class="description">Not calculated yet. Reliable rarity ranking needs verified mint-year and mint-mark information, mintage data, and evidence of availability.</p>`;
+}
+
+function renderAll() {
+  renderStats();
+  renderCatalogue();
+  renderCollection();
+  renderProfile();
+}
+
+function showPage(page) {
+  currentPage = page;
+  document.querySelectorAll(".nav-btn").forEach(button =>
+    button.classList.toggle("active", button.dataset.page === page));
+  document.getElementById("catalogue-page").classList.toggle("hidden", page !== "catalogue");
+  document.getElementById("collection-page").classList.toggle("hidden", page !== "collection");
+  document.getElementById("profile-page").classList.toggle("hidden", page !== "profile");
+
+  const content = {
+    catalogue: ["Explore Indian Coins", "Browse one entry per coin design. Record the year or years of the examples you own."],
+    collection: ["My Collection", "Your owned designs and the years you have recorded."],
+    profile: ["My Profile", "Track your collection progress and keep a backup of your records."]
+  };
+  document.getElementById("page-title").textContent = content[page][0];
+  document.getElementById("page-subtitle").textContent = content[page][1];
+  renderAll();
+}
+
+function findCoinFromElement(element) {
+  const card = element.closest(".coin-card");
+  return card ? coins.find(coin => coin.id === card.dataset.id) : null;
+}
+
+function addYear(coin, year) {
+  year = Number(year);
+  if (!Number.isInteger(year) || year < 1835 || year > 2100) {
+    alert("Enter a valid coin year.");
+    return;
+  }
+  if (!owned[coin.id]) owned[coin.id] = [];
+  if (!owned[coin.id].includes(year)) owned[coin.id].push(year);
+  owned[coin.id].sort((a,b) => a-b);
+  saveOwned();
+  renderAll();
+}
+
+function removeYear(coin, year) {
+  owned[coin.id] = getYears(coin).filter(item => item !== Number(year));
+  if (!owned[coin.id].length) delete owned[coin.id];
+  saveOwned();
+  renderAll();
+}
+
+document.querySelectorAll(".nav-btn").forEach(button =>
+  button.addEventListener("click", () => showPage(button.dataset.page)));
+
+document.getElementById("search").addEventListener("input", renderCatalogue);
+document.getElementById("denomination").addEventListener("change", renderCatalogue);
+document.getElementById("ownership-filter").addEventListener("change", renderCatalogue);
+document.getElementById("collection-search").addEventListener("input", renderCollection);
 
 document.addEventListener("change", event => {
-  if (event.target.matches("[data-coin]")) {
-    const id = event.target.dataset.coin;
-    event.target.checked ? owned.add(id) : owned.delete(id);
-    save();
-    update();
+  if (!event.target.matches(".own-checkbox")) return;
+  const coin = findCoinFromElement(event.target);
+  if (!coin) return;
+
+  if (event.target.checked) {
+    const card = event.target.closest(".coin-card");
+    card.querySelector(".year-panel").classList.add("open");
+    if (!owns(coin)) {
+      // The user still needs to choose a year before a coin is recorded as owned.
+      card.querySelector(".year-select").focus();
+    }
+  } else {
+    const years = getYears(coin);
+    if (years.length && !confirm("Remove all recorded years for this coin design?")) {
+      renderAll();
+      return;
+    }
+    delete owned[coin.id];
+    saveOwned();
+    renderAll();
   }
 });
-$("search").addEventListener("input", update);
-$("denom").addEventListener("change", update);
-$("sort").addEventListener("change", update);
 
-document.querySelectorAll("nav button").forEach(button => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b===button));
-    ["catalogue","collection","profile"].forEach(id=>$(id).classList.toggle("hidden",id!==button.dataset.page));
-  });
+document.addEventListener("change", event => {
+  if (!event.target.matches(".year-select")) return;
+  const card = event.target.closest(".coin-card");
+  const customRow = card.querySelector(".custom-year-row");
+  if (event.target.value === "other") {
+    customRow.classList.remove("hidden");
+    customRow.style.display = "block";
+  } else {
+    customRow.classList.add("hidden");
+    customRow.style.display = "none";
+  }
 });
 
-$("export").addEventListener("click", () => {
-  const rows = [["Coin","Denomination","Year","Series","Owned"]];
-  coins.forEach(c=>rows.push([c.name,c.denom,c.year,c.series,owned.has(c.id)?"Yes":"No"]));
-  const csv = rows.map(row=>row.map(value=>`"${String(value).replace(/"/g,'""')}"`).join(",")).join("\r\n");
-  const blob = new Blob(["\uFEFF"+csv], {type:"text/csv;charset=utf-8;"});
+document.addEventListener("click", event => {
+  const card = event.target.closest(".coin-card");
+  if (!card) return;
+  const coin = findCoinFromElement(event.target);
+  if (!coin) return;
+
+  if (event.target.closest(".add-year")) {
+    const select = card.querySelector(".year-select");
+    if (!select.value || select.value === "other") {
+      alert("Choose a year first, or select 'Enter another year'.");
+      return;
+    }
+    addYear(coin, select.value);
+  }
+
+  if (event.target.closest(".add-custom-year")) {
+    const input = card.querySelector(".year-input");
+    if (!input.value) {
+      alert("Enter the year stamped on your coin.");
+      return;
+    }
+    addYear(coin, input.value);
+  }
+
+  if (event.target.closest(".remove-year")) {
+    removeYear(coin, event.target.closest(".remove-year").dataset.year);
+  }
+
+  if (event.target.closest(".remove-coin")) {
+    if (confirm("Remove all recorded years for this coin design?")) {
+      delete owned[coin.id];
+      saveOwned();
+      renderAll();
+    }
+  }
+});
+
+function exportCSV() {
+  const rows = [["Coin design", "Denomination (INR)", "Category", "Year owned"]];
+  coins.forEach(coin => getYears(coin).forEach(year => {
+    rows.push([coin.name, coin.denomination, coin.category, year]);
+  }));
+  const csv = rows.map(row => row.map(value =>
+    '"' + String(value).replace(/"/g, '""') + '"').join(",")).join("\r\n");
+  const blob = new Blob(["\uFEFF" + csv], {type:"text/csv;charset=utf-8;"});
   const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url; a.download = "bharat-coin-checklist.csv"; a.click();
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "bharat-coin-vault-collection.csv";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
   URL.revokeObjectURL(url);
-});
+}
 
-update();
+document.getElementById("export-btn").addEventListener("click", exportCSV);
+document.getElementById("profile-export").addEventListener("click", exportCSV);
+
+renderAll();
 </script>
 </body>
 </html>
