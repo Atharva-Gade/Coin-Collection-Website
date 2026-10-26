@@ -1,0 +1,343 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coin Collection</title>
+<style>
+:root {
+  --bg: #f5f3ed;
+  --card: #fffefa;
+  --ink: #252a24;
+  --muted: #77796f;
+  --green: #315b43;
+  --line: #e5e2d8;
+  --gold: #b58a43;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Inter, system-ui, Arial, sans-serif;
+}
+header {
+  background: var(--green);
+  color: white;
+  padding: 23px max(20px, calc((100% - 1120px)/2));
+}
+.brand { font-size: 23px; font-weight: 800; }
+.brand span { color: #e6c982; }
+header p { margin: 6px 0 0; color: #d9e2d9; font-size: 14px; }
+nav {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  max-width: 1120px; margin: auto; padding: 18px 20px 0;
+}
+nav button, .filter, .action {
+  border: 1px solid var(--line);
+  background: var(--card);
+  padding: 10px 15px;
+  border-radius: 9px;
+  cursor: pointer;
+  color: var(--ink);
+  font: inherit;
+}
+nav button.active, .action {
+  background: var(--green); color: white; border-color: var(--green);
+}
+main { max-width: 1120px; margin: auto; padding: 24px 20px 60px; }
+h1 { font-size: clamp(27px, 4vw, 38px); margin: 5px 0 8px; }
+h2 { font-size: 21px; }
+.muted { color: var(--muted); }
+.stats {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 13px; margin: 24px 0;
+}
+.stat, .panel, .coin {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.stat { padding: 18px; }
+.stat strong { display: block; font-size: 27px; margin-top: 7px; }
+.toolbar {
+  display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0;
+}
+input, select {
+  border: 1px solid var(--line); background: white;
+  border-radius: 9px; padding: 12px; font: inherit;
+}
+input { flex: 1; min-width: 190px; }
+.grid {
+  display: grid; grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 15px;
+}
+.coin { overflow: hidden; }
+.coin-top {
+  padding: 22px 12px; background: #eeece2;
+  text-align: center;
+}
+.coin-art {
+  width: 104px; height: 104px; border-radius: 50%;
+  margin: auto; display: grid; place-items: center;
+  border: 5px double #b4a16d;
+  background: radial-gradient(circle at 35% 30%, #f6e7b5, #bca66d 72%, #8e7849);
+  box-shadow: 0 4px 10px #0002;
+  color: #5e4c27; font-size: 26px; font-weight: 800;
+}
+.coin-body { padding: 16px; }
+.coin h3 { margin: 0 0 7px; font-size: 17px; }
+.tag {
+  display: inline-block; font-size: 11px; border-radius: 5px;
+  background: #e8eee6; color: var(--green); padding: 5px 7px;
+  margin: 3px 0 10px;
+}
+.coin p { font-size: 13px; line-height: 1.5; }
+.coin-bottom {
+  border-top: 1px solid var(--line); padding-top: 12px;
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+}
+.coin-bottom label { font-size: 13px; cursor: pointer; }
+.coin-bottom input { min-width: auto; flex: none; }
+.panel { padding: 22px; margin: 18px 0; }
+.progress {
+  height: 10px; border-radius: 10px; background: #e7e5db;
+  overflow: hidden; margin: 13px 0;
+}
+.progress div { height: 100%; background: var(--green); width: 0; }
+.hidden { display: none !important; }
+footer { text-align: center; color: var(--muted); padding: 25px; font-size: 12px; }
+@media(max-width:760px) {
+  .grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:480px) {
+  .grid, .stats { grid-template-columns: 1fr; }
+  nav button { flex: 1; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Bharat <span>Coin Collection</span></div>
+  <p>Discover India's coins. Build your collection.</p>
+</header>
+
+<nav>
+  <button class="active" data-page="catalogue">Coin Index</button>
+  <button data-page="collection">My Collection</button>
+  <button data-page="profile">My Profile</button>
+</nav>
+
+<main>
+  <section id="catalogue">
+    <h1>Indian Coin Index</h1>
+    <p class="muted">Explore coins of the Republic of India and track the ones you own.</p>
+    <div class="stats">
+      <div class="stat">Coins in catalogue<strong id="total">0</strong></div>
+      <div class="stat">Coins collected<strong id="ownedCount">0</strong></div>
+      <div class="stat">Collection progress<strong id="percent">0%</strong></div>
+    </div>
+    <div class="toolbar">
+      <input id="search" placeholder="Search coin, series, or year..." aria-label="Search coins">
+      <select id="denom" aria-label="Filter denomination">
+        <option value="">All denominations</option>
+        <option>₹1</option><option>₹2</option><option>₹5</option>
+        <option>₹10</option><option>₹20</option>
+      </select>
+      <select id="sort" aria-label="Sort coins">
+        <option value="year">Sort: year</option>
+        <option value="denom">Sort: denomination</option>
+        <option value="name">Sort: name</option>
+      </select>
+    </div>
+    <div class="grid" id="coinGrid"></div>
+    <p id="empty" class="muted hidden">No coins match your search.</p>
+  </section>
+
+  <section id="collection" class="hidden">
+    <h1>My Collection</h1>
+    <p class="muted">Every coin you mark as owned appears here.</p>
+    <div class="panel">
+      <strong id="collectionSummary">0 coins collected</strong>
+      <div class="progress"><div id="collectionBar"></div></div>
+      <p class="muted" id="collectionPercent">0% complete</p>
+    </div>
+    <div class="grid" id="collectionGrid"></div>
+    <p id="collectionEmpty" class="muted">You haven't added any coins yet. Visit the Coin Index to get started.</p>
+  </section>
+
+  <section id="profile" class="hidden">
+    <h1>Collector Profile</h1>
+    <p class="muted">Your personal coin-collecting journey.</p>
+    <div class="panel">
+      <span class="muted">COLLECTOR</span>
+      <h2>My Coin Collection 🇮🇳</h2>
+      <div class="stats">
+        <div class="stat">Unique coins<strong id="profileCount">0</strong></div>
+        <div class="stat">Completion<strong id="profilePercent">0%</strong></div>
+        <div class="stat">Face value owned<strong id="faceValue">₹0</strong></div>
+      </div>
+      <h2>Your rarest listed coin</h2>
+      <div id="rarest"><p class="muted">Add coins to your collection to see this feature.</p></div>
+      <p class="muted">Rarity ratings are preliminary estimates, not verified mintage data or appraisals.</p>
+    </div>
+    <div class="panel">
+      <h2>Collection milestones</h2>
+      <p id="milestone">Your first coin is waiting!</p>
+    </div>
+    <button class="action" id="export">Export my checklist (CSV)</button>
+  </section>
+</main>
+
+<footer>
+  Bharat Coin Collection · Independent collector project · Rarity and catalogue data require verification.
+</footer>
+
+<script>
+const coins = [
+  {id:"u2-2006",name:"Unity in Diversity",denom:"₹2",year:2006,series:"Unity in Diversity",rarity:3,info:"Commemorative-themed circulation design."},
+  {id:"hm-2008",name:"Hasta Mudra",denom:"₹2",year:2008,series:"Hasta Mudra",rarity:2,info:"Hasta Mudra design."},
+  {id:"hm-2009",name:"Hasta Mudra",denom:"₹2",year:2009,series:"Hasta Mudra",rarity:2,info:"Hasta Mudra design."},
+  {id:"hm-2010",name:"Hasta Mudra",denom:"₹2",year:2010,series:"Hasta Mudra",rarity:2,info:"Hasta Mudra design."},
+  {id:"hm-2011",name:"Hasta Mudra",denom:"₹2",year:2011,series:"Hasta Mudra",rarity:2,info:"Hasta Mudra design."},
+  {id:"vaishno-5",name:"Shri Mata Vaishno Devi Shrine Board",denom:"₹5",year:2012,series:"Commemorative",rarity:4,info:"Commemorative coin; verify exact issue details."},
+  {id:"akam-1-2026",name:"Azadi Ka Amrit Mahotsav",denom:"₹1",year:2026,series:"AKAM",rarity:1,info:"Design/year details need confirmation."},
+  {id:"grain-2-2019",name:"Grain Series",denom:"₹2",year:2019,series:"Grain Series",rarity:1,info:"Modern circulation coin."},
+  {id:"grain-5-2019",name:"Grain Series",denom:"₹5",year:2019,series:"Grain Series",rarity:1,info:"Modern circulation coin."},
+  {id:"rupee-1-2015",name:"Rupee Symbol Series",denom:"₹1",year:2015,series:"Rupee Symbol",rarity:1,info:"₹ symbol design."},
+  {id:"rupee-2-2011",name:"Rupee Symbol Series",denom:"₹2",year:2011,series:"Rupee Symbol",rarity:2,info:"₹ symbol design."},
+  {id:"rupee-2-2014",name:"Rupee Symbol Series",denom:"₹2",year:2014,series:"Rupee Symbol",rarity:1,info:"₹ symbol design."},
+  {id:"rupee-2-2015",name:"Rupee Symbol Series",denom:"₹2",year:2015,series:"Rupee Symbol",rarity:1,info:"₹ symbol design."},
+  {id:"rupee-2-2016",name:"Rupee Symbol Series",denom:"₹2",year:2016,series:"Rupee Symbol",rarity:1,info:"₹ symbol design."},
+  {id:"rupee-5-2013",name:"Rupee Symbol Series",denom:"₹5",year:2013,series:"Rupee Symbol",rarity:1,info:"₹ symbol design."},
+  {id:"rupee-10-2015",name:"Rupee Symbol Series",denom:"₹10",year:2015,series:"Rupee Symbol",rarity:1,info:"₹ symbol design."},
+  {id:"rupee-10-2017",name:"Rupee Symbol Series",denom:"₹10",year:2017,series:"Rupee Symbol",rarity:1,info:"₹ symbol design."},
+  {id:"lotus-5-2009",name:"Lotus Series",denom:"₹5",year:2009,series:"Lotus / Floral",rarity:2,info:"Floral design; exact series dates should be verified."},
+  {id:"grain-1-2000",name:"Grain Stalks Series",denom:"₹1",year:2000,series:"Grain Stalks",rarity:2,info:"Older grain-stalk design."}
+];
+
+// Rarity scores are only starter estimates; do not treat them as valuations.
+let owned = new Set();
+try {
+  owned = new Set(JSON.parse(localStorage.getItem("bharatOwned") || "[]"));
+} catch (error) {
+  owned = new Set();
+}
+
+const $ = id => document.getElementById(id);
+const rarityLabel = score => ({
+  1:"Common (estimated)",
+  2:"Less common (estimated)",
+  3:"Uncommon (estimated)",
+  4:"Potentially scarce (unverified)"
+}[score] || "Unknown");
+
+function save() {
+  try {
+    localStorage.setItem("bharatOwned", JSON.stringify([...owned]));
+  } catch (error) {
+    alert("Your browser could not save the checklist. Check browser storage settings.");
+  }
+}
+
+function card(c) {
+  return `<article class="coin">
+    <div class="coin-top"><div class="coin-art" aria-label="Decorative coin illustration">${c.denom.replace("₹","")}</div></div>
+    <div class="coin-body">
+      <span class="tag">${c.series}</span>
+      <h3>${c.denom} · ${c.name}</h3>
+      <p class="muted">Year: ${c.year}</p>
+      <p>${c.info}</p>
+      <p class="muted">${rarityLabel(c.rarity)}</p>
+      <div class="coin-bottom">
+        <label><input type="checkbox" data-coin="${c.id}" ${owned.has(c.id)?"checked":""}> I own this</label>
+        <span>${c.year}</span>
+      </div>
+    </div>
+  </article>`;
+}
+
+function filteredCoins() {
+  const query = $("search").value.trim().toLowerCase();
+  const denom = $("denom").value;
+  let list = coins.filter(c =>
+    (!denom || c.denom === denom) &&
+    `${c.name} ${c.denom} ${c.year} ${c.series}`.toLowerCase().includes(query)
+  );
+  const sort = $("sort").value;
+  list.sort((a,b) => sort === "name"
+    ? a.name.localeCompare(b.name)
+    : sort === "denom"
+      ? Number(a.denom.slice(1)) - Number(b.denom.slice(1)) || a.year-b.year
+      : a.year-b.year);
+  return list;
+}
+
+function drawGrid(element, list) {
+  $(element).innerHTML = list.map(card).join("");
+}
+
+function update() {
+  const count = owned.size;
+  const percent = Math.round(count / coins.length * 100);
+  $("total").textContent = coins.length;
+  $("ownedCount").textContent = count;
+  $("percent").textContent = percent + "%";
+  drawGrid("coinGrid", filteredCoins());
+  $("empty").classList.toggle("hidden", filteredCoins().length !== 0);
+
+  const collected = coins.filter(c => owned.has(c.id));
+  drawGrid("collectionGrid", collected);
+  $("collectionEmpty").classList.toggle("hidden", collected.length !== 0);
+  $("collectionSummary").textContent = `${count} of ${coins.length} catalogue entries collected`;
+  $("collectionPercent").textContent = percent + "% complete";
+  $("collectionBar").style.width = percent + "%";
+  $("profileCount").textContent = count;
+  $("profilePercent").textContent = percent + "%";
+  $("faceValue").textContent = "₹" + collected.reduce((sum,c)=>sum+Number(c.denom.slice(1)),0);
+
+  // Until mintage and survival data are researched, this is only a provisional ranking.
+  const rarest = [...collected].sort((a,b)=>b.rarity-a.rarity || a.year-b.year)[0];
+  $("rarest").innerHTML = rarest
+    ? `<h3>${rarest.denom} · ${rarest.name} (${rarest.year})</h3><p>${rarityLabel(rarest.rarity)}</p><p class="muted">Preliminary ranking only. Verified mintage and variety data may change this result.</p>`
+    : `<p class="muted">Add coins to your collection to see this feature.</p>`;
+  $("milestone").textContent = count === 0 ? "Your first coin is waiting!" :
+    count === coins.length ? "Catalogue starter set completed. Congratulations!" :
+    count >= 10 ? "Great progress — you've collected 10 or more entries!" :
+    "You've started your collection. Keep going!";
+}
+
+document.addEventListener("change", event => {
+  if (event.target.matches("[data-coin]")) {
+    const id = event.target.dataset.coin;
+    event.target.checked ? owned.add(id) : owned.delete(id);
+    save();
+    update();
+  }
+});
+$("search").addEventListener("input", update);
+$("denom").addEventListener("change", update);
+$("sort").addEventListener("change", update);
+
+document.querySelectorAll("nav button").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b===button));
+    ["catalogue","collection","profile"].forEach(id=>$(id).classList.toggle("hidden",id!==button.dataset.page));
+  });
+});
+
+$("export").addEventListener("click", () => {
+  const rows = [["Coin","Denomination","Year","Series","Owned"]];
+  coins.forEach(c=>rows.push([c.name,c.denom,c.year,c.series,owned.has(c.id)?"Yes":"No"]));
+  const csv = rows.map(row=>row.map(value=>`"${String(value).replace(/"/g,'""')}"`).join(",")).join("\r\n");
+  const blob = new Blob(["\uFEFF"+csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "bharat-coin-checklist.csv"; a.click();
+  URL.revokeObjectURL(url);
+});
+
+update();
+</script>
+</body>
+</html>
