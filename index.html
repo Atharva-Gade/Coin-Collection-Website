@@ -240,6 +240,54 @@ footer{border-top:1px solid var(--border);text-align:center;padding:24px 15px;co
     padding: 26px 20px;
   }
 }
+
+/* COINLY - FULL VIEWPORT BACKGROUND FIX */
+
+html,
+body {
+  margin: 0 !important;
+  min-height: 100% !important;
+  width: 100% !important;
+  background-color: #071020 !important;
+}
+
+body {
+  background-image:
+    linear-gradient(
+      rgba(3, 8, 20, 0.22),
+      rgba(3, 8, 20, 0.35)
+    ),
+    url("./coinly-login-bg.png") !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+}
+
+#auth-screen.auth-wrap {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+  overflow-y: auto !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  padding: 30px 16px !important;
+  background: transparent !important;
+  z-index: 9999 !important;
+}
+
+#auth-screen .auth-panel {
+  width: 100% !important;
+  max-width: 460px !important;
+  flex-shrink: 0 !important;
+}
 </style>
 </head>
 <body>
