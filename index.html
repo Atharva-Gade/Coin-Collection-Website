@@ -87,24 +87,158 @@ footer{border-top:1px solid var(--border);text-align:center;padding:24px 15px;co
 @media(max-width:540px){main{padding:23px 14px 45px}header{padding:20px 17px}nav{padding:10px 12px}.coin-grid{grid-template-columns:1fr}h2{font-size:26px}.stat{padding:14px}}
 
 /* COINLY LOGIN BACKGROUND */
+
+/* COINLY FULL-SCREEN BACKGROUND */
 #auth-screen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
   min-height: 100vh;
-  width: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
   background:
-    linear-gradient(
-      rgba(5, 10, 22, 0.25),
-      rgba(5, 10, 22, 0.45)
-    ),
-    url("./coinly-login-bg.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+    linear-gradient(rgba(3, 8, 20, 0.28), rgba(3, 8, 20, 0.4)),
+    url("./coinly-login-bg.png") center center / cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* =================================
+   COINLY PREMIUM LOGIN DESIGN
+================================= */
+
+#auth-screen.auth-wrap {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+  box-sizing: border-box;
+  overflow-y: auto;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 30px 16px;
+
+  background:
+    linear-gradient(
+      rgba(3, 8, 20, 0.25),
+      rgba(3, 8, 20, 0.35)
+    ),
+    url("./coinly-login-bg.png") center center / cover no-repeat;
+}
+
+.auth-panel {
+  width: 100%;
+  max-width: 460px;
   box-sizing: border-box;
+  padding: 36px;
+  border-radius: 20px;
+
+  background: rgba(9, 18, 35, 0.88);
+  border: 1px solid rgba(190, 205, 230, 0.28);
+  box-shadow: 0 20px 65px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  color: #f5f6fb;
+}
+
+.auth-panel .brand-icon {
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid #e8b451;
+  color: #f4bd59;
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 14px;
+}
+
+.auth-panel h2 {
+  color: #ffffff;
+  font-size: 30px;
+  margin: 8px 0;
+}
+
+.auth-panel .subtitle {
+  color: #b9c4d8;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.auth-panel input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 12px 0;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #45536c;
+  background: rgba(255,255,255,0.045);
+  color: #ffffff;
+  font-size: 15px;
+  outline: none;
+}
+
+.auth-panel input::placeholder {
+  color: #9ba9bf;
+}
+
+.auth-panel input:focus {
+  border-color: #e8b451;
+  box-shadow: 0 0 0 3px rgba(232,180,81,0.13);
+}
+
+.auth-panel .btn-primary {
+  width: 100%;
+  padding: 15px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffd078, #d99a35);
+  color: #172033;
+  font-size: 16px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.auth-panel .btn-primary:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.auth-panel .auth-message {
+  color: #ff9b91;
+  font-size: 13px;
+  margin-top: 14px;
+}
+
+.auth-panel .auth-switch {
+  color: #aebbd0;
+  text-align: center;
+  margin-top: 24px;
+}
+
+.auth-panel #auth-switch {
+  background: none;
+  border: none;
+  color: #f3bd59;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: inherit;
+}
+
+@media (max-width: 520px) {
+  .auth-panel {
+    padding: 26px 20px;
+  }
 }
 </style>
 </head>
