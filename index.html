@@ -85,6 +85,27 @@ footer{border-top:1px solid var(--border);text-align:center;padding:24px 15px;co
 .auth-switch button{border:0;background:none;color:var(--green);font-weight:700;padding:0}
 @media(max-width:850px){.coin-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:540px){main{padding:23px 14px 45px}header{padding:20px 17px}nav{padding:10px 12px}.coin-grid{grid-template-columns:1fr}h2{font-size:26px}.stat{padding:14px}}
+
+/* COINLY LOGIN BACKGROUND */
+#auth-screen {
+  min-height: 100vh;
+  width: 100%;
+  background:
+    linear-gradient(
+      rgba(5, 10, 22, 0.25),
+      rgba(5, 10, 22, 0.45)
+    ),
+    url("./coinly-login-bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 16px;
+  box-sizing: border-box;
+}
 </style>
 </head>
 <body>
