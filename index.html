@@ -88,24 +88,6 @@ footer{border-top:1px solid var(--border);text-align:center;padding:24px 15px;co
 
 /* COINLY LOGIN BACKGROUND */
 
-/* COINLY FULL-SCREEN BACKGROUND */
-#auth-screen {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  min-height: 100vh;
-  box-sizing: border-box;
-  overflow-y: auto;
-  background:
-    linear-gradient(rgba(3, 8, 20, 0.28), rgba(3, 8, 20, 0.4)),
-    url("./coinly-login-bg.png") center center / cover no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-}
-
 /* =================================
    COINLY PREMIUM LOGIN DESIGN
 ================================= */
@@ -241,52 +223,54 @@ footer{border-top:1px solid var(--border);text-align:center;padding:24px 15px;co
   }
 }
 
-/* COINLY - FULL VIEWPORT BACKGROUND FIX */
+/* COINLY LOGIN SCREEN - CORRECTED */
 
 html,
 body {
-  margin: 0 !important;
-  min-height: 100% !important;
-  width: 100% !important;
-  background-color: #071020 !important;
+  margin: 0;
+  min-height: 100%;
+  width: 100%;
+  background: #071020 !important;
 }
 
-body {
-  background-image:
+/* Background image ONLY on login screen */
+#auth-screen.auth-wrap {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  overflow-y: auto;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 16px;
+
+  background:
     linear-gradient(
-      rgba(3, 8, 20, 0.22),
+      rgba(3, 8, 20, 0.25),
       rgba(3, 8, 20, 0.35)
     ),
-    url("./coinly-login-bg.png") !important;
-  background-size: cover !important;
-  background-position: center center !important;
-  background-repeat: no-repeat !important;
-  background-attachment: fixed !important;
+    url("./coinly-login-bg.png") center center / cover no-repeat;
+
+  z-index: 9999;
 }
 
-#auth-screen.auth-wrap {
-  position: fixed !important;
-  inset: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  min-height: 100vh !important;
-  max-width: none !important;
-  box-sizing: border-box !important;
-  overflow-y: auto !important;
-
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-
-  padding: 30px 16px !important;
-  background: transparent !important;
-  z-index: 9999 !important;
+/* Show login screen only when it is NOT hidden */
+#auth-screen.auth-wrap:not(.hidden) {
+  display: flex;
 }
 
+/* CRITICAL: hide login screen after successful login */
+#auth-screen.auth-wrap.hidden {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+/* Keep login card centered */
 #auth-screen .auth-panel {
-  width: 100% !important;
-  max-width: 460px !important;
-  flex-shrink: 0 !important;
+  width: 100%;
+  max-width: 460px;
+  flex-shrink: 0;
 }
 </style>
 </head>
