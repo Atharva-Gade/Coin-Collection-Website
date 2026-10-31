@@ -864,11 +864,10 @@ $("signout-btn").addEventListener("click",async()=>{
 
 /* RESTORE EXISTING LOGIN SESSION */
 async function initializeCoinly() {
-  if (SUPABASE_KEY==="sb_publishable_Mr4y7Hmngq6b0cEX262fVg_YDcevm4Z") {
-    setAuthMessage("Add your Supabase publishable key in the code before using Coinly.",true);
-    return;
-  }
-
+  if (!SUPABASE_KEY || SUPABASE_KEY === "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE") {
+  setAuthMessage("Add your Supabase publishable key in the code before using Coinly.", true);
+  return;
+}
   const {data,error} = await supabaseClient.auth.getSession();
   if (error) {
     setAuthMessage("Could not check your login session: "+error.message,true);
